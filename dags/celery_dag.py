@@ -9,19 +9,19 @@ def celery_dag():
         sleep(5)
         return "Task 1 completed"
 
-    @task
+    @task(queue="high_cpu")
     def t2():
         print("Task 2 is running")
         sleep(5)
         return "Task 2 completed"
 
-    @task
+    @task(queue="high_cpu")
     def t3():
         print("Task 3 is running")
         sleep(5)
         return "Task 3 completed"
     
-    @task
+    @task(queue="high_cpu")
     def t4():
         print("Task 4 is running")
         sleep(5)
