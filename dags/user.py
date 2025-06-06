@@ -3,42 +3,28 @@ import requests
 
 @asset(
     schedule="@daily",
-    description="A user asset that represents a user in the system.",
     uri="https://randomuser.me/api/",
 )
 def user(self) -> dict[str]:
-    """
-    This asset represents a user in the system.
-    """
     response = requests.get(self.uri, verify=False)
     return response.json()
 
 
-@asset(
-    schedule=user
+@asset.multi(
+    schedule=user,
+    outlets=[
+        Asset(name="user_location"),
+        Asset(name="user_login")
+    ]
 )
-def user_location(user: Asset, context: Context) -> dict[str]:
-    """
-    This asset represents the location of a user in the system.
-    """
+def user_info(user: Asset, context: Context) -> list[dict[str]]:
     user_data = context['ti'].xcom_pull(
         dag_id=user.name,
         task_ids=user.name,
         include_prior_dates=True
     )
-    return user_data['results'][0]['location'] if user_data and 'results' in user_data else {}
+    return [
+        user_data['results'][0]['location'],
+        user_data['results'][0]['login']
+    ]
 
-
-@asset(
-    schedule=user
-)
-def user_login(user: Asset, context: Context) -> dict[str]:
-    """
-    This asset represents the login information of a user in the system.
-    """
-    user_data = context['ti'].xcom_pull(
-        dag_id=user.name,
-        task_ids=user.name,
-        include_prior_dates=True
-    )
-    return user_data['results'][0]['login'] if user_data and 'results' in user_data else {}
