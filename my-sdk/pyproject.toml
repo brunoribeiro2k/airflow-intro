@@ -11,7 +11,6 @@ packages = ["my_sdk"]
 [project]
 name = "my-sdk"
 dynamic = ["version"]
-version = "0.1.0"
 description = "My SDK for SQL"
 readme = "README.md"
 requires-python = ">=3.10"
