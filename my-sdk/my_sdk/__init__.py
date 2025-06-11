@@ -16,9 +16,9 @@ def get_provider_info() -> dict[str, Any]:
         "version": [__version__],
         "task-decorators": [
             {
-                "name": "sql,"
+                "name": "sql",
                 "class-name": "my_sdk.decorators.sql.sql_task",
             }
-        ]
+        ],
         "author": "Bruno Ribeiro"
     }
